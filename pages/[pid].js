@@ -6,9 +6,9 @@ import { Fragment } from "react";
 export default function ProductDetailPage(props) {
     const { loadedProduct } = props
 
-    // if (!loadedProduct) { // kalo fallback true pake ini
-    //     return <p>loading...</p>
-    // }
+    if (!loadedProduct) { // kalo fallback true pake ini
+        return <p>loading...</p>
+    }
 
     return (
         <Fragment>
@@ -35,6 +35,12 @@ export async function getStaticProps(context) {
 
     const product = data.products.find(product => product.id === productId);
 
+    if (!product) {
+        return {
+            notFound: true
+        }
+    }
+
     return {
         props: {
             loadedProduct: product
@@ -51,8 +57,6 @@ export async function getStaticPaths() {
 
     return {
         paths: pathWithParams,
-        // fallback: true
-        fallback: false,
-
+        fallback: true,
     };
 }

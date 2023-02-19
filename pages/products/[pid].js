@@ -6,9 +6,9 @@ import { Fragment } from "react";
 export default function ProductDetailPage(props) {
     const { loadedProduct } = props
 
-    if (!loadedProduct) { // kalo fallback true pake ini
-        return <p>loading...</p>
-    }
+    // if (!loadedProduct) { // kalo fallback true pake ini
+    //     return <p>loading...</p>
+    // }
 
     return (
         <Fragment>

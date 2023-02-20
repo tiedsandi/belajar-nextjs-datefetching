@@ -1,35 +1,31 @@
 import { useEffect, useState } from "react"
-// client side data fetching
+import useSWR from 'swr';
 
 function LastSalesPage() {
     const [sales, setSales] = useState();
-    const [isLoading, setIsLoading] = useState(false);
+
+    const { data, error } = useSWR('https://nextjs-course-58ffc-default-rtdb.asia-southeast1.firebasedatabase.app/sales.json');
 
     useEffect(() => {
-        setIsLoading(true);
-        fetch('https://nextjs-course-58ffc-default-rtdb.asia-southeast1.firebasedatabase.app/sales.json')
-            .then(res => res.json())
-            .then(data => {
-                const transforemedSales = []
+        if (data) {
+            const transforemedSales = []
+            for (const key in data) {
+                transforemedSales.push({
+                    id: key,
+                    username: data[key].username,
+                    volume: data[key].volume
+                })
+            }
+            setSales(transforemedSales)
+        }
+    }, [data])
 
-                for (const key in data) {
-                    transforemedSales.push({
-                        id: key,
-                        username: data[key].username, volume: data[key].volume
-                    })
-                }
-
-                setSales(transforemedSales)
-                setIsLoading(false)
-            })
-    }, [])
-
-    if (isLoading) {
-        return <p>Loading...</p>
+    if (error) {
+        return <p>Failed to Load</p>
     }
 
-    if (!sales) {
-        return <p>No Data</p>
+    if (!data || !sales) {
+        return <p>Loading...</p>
     }
 
     return (
